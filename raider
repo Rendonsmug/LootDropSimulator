@@ -1,0 +1,51 @@
+from __future__ import division
+
+class Raider(object):
+
+#Creates a 'raider' object with 820 for every slot (13 slots) and 820 starting level. This could be extended futher to include item names to check for uniques and custom starting levels. Might be better to do in a dictionary?
+
+	def __init__(self):
+		self.Head = 820
+		self.Shoulder = 820
+		self.Chest = 820
+		self.Back = 820
+		self.Wrist = 820
+		self.Hands = 820
+		self.Waist = 820
+		self.Feet = 820
+		self.Neck = 820
+		self.Trinket1 = 820
+		self.Trinket2 = 820
+		self.Finger1 = 820
+		self.Finger2 = 820
+		self.Average = 820
+
+#The trinkets and finger slots are interchangable, so I return both values here
+
+	def getLevel(slot):
+		if slot == 'Trinket':
+			return min(self.Trinket1, self.Trinket2)
+		elif slot == 'Finger':
+			return min(self.Finger1, self.Finger2)
+		return self.slot
+
+#And upgrade the lower here
+
+	def upgrade(slot, level):
+		if slot == 'Trinket':
+			if self.Trinket1 >= self.Trinket2:
+				self.Trinket1 = level
+			else:
+				self.Trinket2 = level
+		elif slot == 'Finger':
+			if self.Finger1 >= self.Finger2:
+				self.Finger1 = level
+			else:
+				self.Finger2 = level
+		self.recomputeAverage()	
+
+#The average will need to be redone every upgrade. Maybe it would be better to not compute the average until needed and use a getAeverage funtion?
+
+	def recomputeAverage(self):
+		sum = self.Head + self.Shoulder + self.Chest + self.Back + self.Wrist + self.Hands + self.Waist + self.Feet + self.Neck + self.Trinket1 + self.Trinket2 + self.Finger1 + self.Finger2
+		self.Average = sum // 13

@@ -1,0 +1,103 @@
+from __future__ import division
+import random
+import math
+
+raid_size = 20
+loot_style = master
+raid = []
+rand = random.seed()
+equipment_slots = ['Head', 'Shoulder', 'Chest', 'Back', 'Wrist', 'Hands', 'Waist', 'Legs', 'Feet', 'Neck', 'Trinket', 'Finger']
+
+#When a boss is downed, a certain amount of loot is generated with the size of the raid and loot type. This should be extended with specific drop tables
+def bossDrops(size, style):
+	#if randint returns 4, extra should be 1, giving an extra piece of loot
+	if style == "master":
+		chance = size % 5
+		extra = floor(chance * rand.randint(0,5))
+		return extra + (size // 5)
+	#randint is rolled for every raider in personal. Guarenteed at least 1 in 5. I've read a rumor that says there can only be one more than master loot, so this may need to have a comparison check added.
+	if style = "personal":
+		#I read that
+		loot = 0
+		guarenteed = size // 5
+		for x in range(size):
+			if rand.randint(0,5) == 4
+			loot += 1
+		return max(guarenteed, loot)
+
+#Personal loot can trade. We need to know who is the most worthy target.
+def findRaiderWithLowestIlevelInSlot(group, slot):
+	lowestLevel = 1000
+	worthyTarget = 0
+	for x in group:
+		compare = x.getlevel(slot)
+		if compare <= lowestLevel:
+			lowestLevel = compare
+			worthyTarget = x
+	return x
+
+
+#I kind of feel relying on these arguments is cheating, but I expect to break this out into different raids once I get the actual data. I.E. runEmeraldNightmare, runHeroicEmeraldNightmare. Refering style here feels ugly, as it is only used as personal. On a rewrite "personal loot" should probably be its own seperate function for each raid, and should do probability for each raid member like the game would. Maybe a 'raid' class that also handles loot with its own loot tables
+
+def runRaid(bossCount,raidTeam,iLevel,style,slots):
+	if style = 'personal'
+		#Assuming full clear
+		for a in bossCount:
+			
+			#First get the number of drops
+			drops = bossDrops(len(raidTeam), iLevel, 'personal')
+			
+			#Assign the drops to the raiders
+			recipients = []
+			
+			#Chooses four raiders at random. Sample chooses without replacement.
+			for x in range(drops):
+				recipients.append(rand.sample(xrang(raid_size)))
+			
+			#Assigned slots to the items, will be made useless with actual drop tables
+			types = []
+			for y in range(drops):
+				types.append(rand.choice(slots))
+			
+			#Assigning loot will work as a zipper. This is such an ugly way to do this. Maybe this will be motivation to get the actual tables.
+			#BUT WAIT - loot can be traded if current item is same or higher ilevel. Assuming trading is always done and to the lowest member
+
+			for z in range(drops):
+				candidate = raidTeam[recipiets[z]]
+				if candidate.getlevel(types[z]) > iLevel:
+					candidate.upgrade(types[z], ilevel)
+				else:
+					luckySOB = findRaiderWithLowestIlevelInSlot(raidTeam,types[z])
+					luckySOB.upgrade(types[z], ilevel)
+	else:
+		#Also Assuming First clear
+		for a in BossCount:
+
+			#First get number of drops
+			drops = bossDrops(len(raidTeam), iLevel, 'master')
+
+			#Assign slots to items
+			types = []
+			for x in range(drops):
+				types.append(rand.choice(slots))
+
+			#Assign item to most deserving raider:
+			for y in types:
+				winner = findRaiderWithLowestIlevelInSlot(raidTeam, y)
+				winner.upgrade(y, iLevel)
+
+#And of course some way to evaluate
+
+def getAverageiLevel(group):
+	sum = 0
+	for y in group:
+		sum += y.Average
+	return sum // len(group)
+
+
+#The actual program
+for x in range(raid_size):
+	raid.append(raider())
+print getAverageiLevel(raid)
+runRaid(7, raid, 850, loot_style, equipment_slots)
+print getAverageiLevel(raid)
